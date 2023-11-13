@@ -28,7 +28,7 @@ for k=1:size(xyPt,1)
     voisins_matrix = I(xyPt(k,2)-K:xyPt(k,2)+K,xyPt(k,1)-K:xyPt(k,1)+K);
     voisins(k,:) = voisins_matrix(:);
 end    
-fprintf(" taille voisin : %d %d",size(voisins))
+fprintf(" taille voisin : %d %d",size(voisin))
 
 
 

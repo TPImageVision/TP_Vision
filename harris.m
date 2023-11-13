@@ -25,14 +25,14 @@ if nargin < 2, TailleFenetre=9;  end;
 %       en utilisant la fonction gradient
 Im = double(Im);
 %%% A COMPLETER %%%
-[Ii,Ij] = imgradient(im2gray(Im));
+[Ii,Ij] = gradient(im2gray(Im));
 
 % (1.2) Calcul du filtre de lissage gaussien
 % Calcul de sigma en fonction de la taille de la fenetre  
 sig = (TailleFenetre - 1)/4;
 % Utilisation de fspecial
 %%% A COMPLETER %%%
-L = fspecial('gaussian',[TailleFenetre TailleFenetre],sig);
+L = fspecial('gaussian',TailleFenetre,sig);
 
 % (1.3) Calcul de la reponse R
 % Calcul des elements A, B et C puis calcul de la reponse suivant l'equation (1)
@@ -42,7 +42,7 @@ L = fspecial('gaussian',[TailleFenetre TailleFenetre],sig);
 A = conv2(Ii.^2,L,"same");
 B = conv2(Ij.^2,L,"same");
 C = conv2(Ii.*Ij,L,"same");
-R = A.*B - C.^2 - k*(A+B);
+R = A.*B - C.^2 - k*((A+B).^2);
 
 % (2.1) Suppression des non-maxima locaux suivant l'equation (2)
 % ATTENTION : il faut gérer le cas particulier des bords
@@ -64,6 +64,7 @@ for i=(n2+1):(l-n2)
     end
   end
 end
+
 
 % (2.2) Selection des NbPoints en fonction de "NbPoints" reponses les plus fortes
 % Tri des reponses : utiliser sort en LINEARISANT Res au préalable

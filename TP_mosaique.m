@@ -45,7 +45,7 @@ affichage_POI(Im2,XY_2,'POI Image 2',1,2,2);
 % Estimation (et verification) de l'homographie %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % A DECOMMENTER QUAND HOMOGRAPHIE AURA ETE COMPLETEE
-% H = homographie(XY_C1,XY_C2)
+H = homographie(XY_C1,XY_C2)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 % Calcul de la mosaique %

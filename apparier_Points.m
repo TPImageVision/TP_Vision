@@ -61,17 +61,6 @@ vois1 = voisinage(I1,Ptint1(indptI1,:),K);
 vois2 = voisinage(I2,Ptint2(indptI2,:),K);
 
 
-%fprintf("taille vois 1 = (%d,%d) \n",size(vois1,1),size(vois1,2))
-
-for k=1:size(vois1,1) 
-    vois1(k,:) = im2gray(vois1(k,:));
-end
-
-for k=1:size(vois2,1) 
-    vois2(k,:) = im2gray(vois2(k,:));
-end
-
-
 % Nb Pixels par fenetre de correlation
 NbPix = K*K;
 % Calcul de tous les appariements possibles
@@ -88,14 +77,14 @@ gray_mean_im1 = mean(vois1,2);
 gray_mean_im2 = mean(vois2,2);
 
 
-
 % Variance des niveaux de gris du voisinage de chaque point
 % Utilisation de var
 %%%%%%%%%%%%%%%%%
 %% A COMPLETER %%
 %%%%%%%%%%%%%%%%%
-gray_var_im1 = var(vois1,[],2);
-gray_var_im2 = var(vois2,[],2);
+gray_var_im1 = var(vois1,1,2);
+gray_var_im2 = var(vois2,1,2);
+
 
 
 % Pour chaque combinaison de paires de points, la covariance 
@@ -115,7 +104,7 @@ Sum = 0;
 for i=1:size(vois1_centre,1)
     for j=1:size(vois2_centre,1)
         mat_inter = vois1_centre(i,:).*vois2_centre(j,:);
-        Sum = sum(mat_inter(:))/K^2;
+        Sum = sum(mat_inter(:))/((2*K+1)^2);
         mat_cov(i,j) = Sum;
     end
 end    
@@ -130,12 +119,12 @@ end
 cor = zeros(size(mat_cov));
 for i=1:size(mat_cov,1)
     for j=1:size(mat_cov,2)
-        cor = mat_cov(i,j)/sqrt(gray_var_im1(i)*gray_var_im2(j));
+        cor(i,j) = mat_cov(i,j)/sqrt(gray_var_im1(i)*gray_var_im2(j));
     end   
 end
 fprintf("taille cov = [%d %d] \n",size(mat_cov,1),size(mat_cov,2))
 
-fdad = mat_cov
+fdad = mat_cov;
 
 % Affectation a la matrice C
 C(indptI1(i1)+(indptI2(i2)-1)*nptI1) = cor';

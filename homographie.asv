@@ -46,8 +46,6 @@ A(2:2:end) = [zeros(nb_pt_ap,3) XY_C1 ones(nb_pt_ap,1) -(XY_C2(:,2).*XY_C1(:,1))
 % ... A completer ...
 [U S V] = svd(A'*A);
 
-H = V(:,9); 
-
 % Former la matrice H de taille 3x3
 % ... A completer ...
-H = reshape(H,[3,3]);
+
