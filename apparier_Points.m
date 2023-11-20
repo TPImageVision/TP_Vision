@@ -45,21 +45,8 @@ nbptintI1 = size(indptI1,1); nbptintI2 = size(indptI2,1);
 % Determination du voisinage : vois1, vois2 matrices composees 
 % pour chaque ligne des niveaux de gris du voisinage du point
 % Appel a la fonction voisinage
-%%%%%%%%%%%%%%%%%
-%% A COMPLETER %%
-%%%%%%%%%%%%%%%%%
-
-% :-) Si j'ai bien compris, pour chaque point, on associe tout son
-% voisinage en niveau de gris
-
-vois1 = zeros(nbptintI1,K*K);
-vois2 = zeros(nbptintI2,K*K);
-
-%fprintf("taille vois 1 = (%d,%d) \n",size(vois1,1),size(vois1,2))
-
-vois1 = voisinage(I1,Ptint1(indptI1,:),K);
-vois2 = voisinage(I2,Ptint2(indptI2,:),K);
-
+vois1 = voisinage(I1, Ptint1(indptI1, :), K);
+vois2 = voisinage(I2, Ptint2(indptI2, :), K);
 
 % Nb Pixels par fenetre de correlation
 NbPix = K*K;
@@ -70,63 +57,35 @@ i1 = i1(:); i2 = i2(:);
 % Pour les images I1 et I2
 % Moyenne des niveaux de gris du voisinage de chaque point
 % Utilisation de mean
-%%%%%%%%%%%%%%%%%
-%% A COMPLETER %%
-%%%%%%%%%%%%%%%%%
-gray_mean_im1 = mean(vois1,2);
-gray_mean_im2 = mean(vois2,2);
-
+m1 = mean(vois1, 2);
+m2 = mean(vois2, 2);
 
 % Variance des niveaux de gris du voisinage de chaque point
 % Utilisation de var
-%%%%%%%%%%%%%%%%%
-%% A COMPLETER %%
-%%%%%%%%%%%%%%%%%
-gray_var_im1 = var(vois1,1,2);
-gray_var_im2 = var(vois2,1,2);
-
-
+v1 = var(vois1, [], 2);
+v2 = var(vois2, [], 2);
 
 % Pour chaque combinaison de paires de points, la covariance 
 % entre les deux voisinages : le numerateur dans la formule ZNCC
-%%%%%%%%%%%%%%%%%
-%% A COMPLETER %%
-%%%%%%%%%%%%%%%%%
-mat_cov = zeros(nbptintI1,nbptintI2);
+%v12 = mean((vois1(i1) - m1(i1)) .* (vois2(i2) - m2(i2)), 2);
+v12 = zeros(length(i1),1);
+for i=1:length(i1)
+    X = vois1(i1(i),:);
+    Y = vois2(i2(i),:);
 
-vois1_centre = vois1(:,:) - gray_mean_im1;
-vois2_centre = vois2(:,:) - gray_mean_im2;
+    meanX = m1(i1(i));
+    meanY = mean(i2(i));
 
-% matrice intermediaire permettant de stocker le produit terme à terme de vois1 et vois2
-mat_inter = zeros(K*K);
-Sum = 0;
+    n = length(X);
 
-for i=1:size(vois1_centre,1)
-    for j=1:size(vois2_centre,1)
-        mat_inter = vois1_centre(i,:).*vois2_centre(j,:);
-        Sum = sum(mat_inter(:))/((2*K+1)^2);
-        mat_cov(i,j) = Sum;
-    end
-end    
-
+    v12(i) = sum((X - meanX) .* (Y - meanY)) / (n - 1);
+end
 
 % Calcul du score de correlation : 
 % ajouter le denominateur dans la formule ZNCC 
 % (le produit des variances)
-%%%%%%%%%%%%%%%%%
-%% A COMPLETER %%
-%%%%%%%%%%%%%%%%%
-cor = zeros(size(mat_cov));
-for i=1:size(mat_cov,1)
-    for j=1:size(mat_cov,2)
-        cor(i,j) = mat_cov(i,j)/sqrt(gray_var_im1(i)*gray_var_im2(j));
-    end   
-end
-fprintf("taille cov = [%d %d] \n",size(mat_cov,1),size(mat_cov,2))
-
-fdad = mat_cov;
+cor = v12 ./ sqrt(v1(i1) .* v2(i2));
 
 % Affectation a la matrice C
 C(indptI1(i1)+(indptI2(i2)-1)*nptI1) = cor';
-
 

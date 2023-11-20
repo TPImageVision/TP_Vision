@@ -20,6 +20,7 @@ NbPoints = 100 ;
 k = 0.05;
 seuil = 0.75;
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Detection des points d'interet avec Harris %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -34,7 +35,7 @@ affichage_POI(Im2,XY_2,'POI Image 2',1,2,2);
 % voisinage(Im1,[5 105; 125 235],3)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Appariement des points d'interet %-
+% Appariement des points d'interet %-0
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % A DECOMMENTER POUR OBSERVER LA MISE EN CORRESPONDANCE 
 % avec/sans verification des contraintes
@@ -51,11 +52,11 @@ H = homographie(XY_C1,XY_C2)
 % Calcul de la mosaique %
 %%%%%%%%%%%%%%%%%%%%%%%%%
 % A DECOMMENTER QUAND HOMOGRAPHIE AURA ETE VALIDEE
-% Imos = mosaique(Im1,Im2,H);
-% figure; 
-% affichage_image(uint8(Imos),'Mosaique obtenue a partir des 2 images initiales',1,1,1);
+Imos = mosaique(Im1,Im2,H);
+figure; 
+affichage_image(uint8(Imos),'Mosaique obtenue a partir des 2 images initiales',1,1,1);
 % SAUVEGARDE DE LA MOSAIQUE A DEUX IMAGES
-% imwrite(uint8(Imos),'mosaique2.pgm');
+imwrite(uint8(Imos),'mosaique2.pgm');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Version 2 pour la reconstruction                %
